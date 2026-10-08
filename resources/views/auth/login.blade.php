@@ -8,7 +8,7 @@
     <div class="w-full max-w-md">
 
         <div class="text-center mb-7">
-            <span class="inline-grid place-items-center w-12 h-12 rounded-xl bg-soil-900 text-crop-300 font-display text-xl mb-4" aria-hidden="true">✦</span>
+            <span class="inline-grid place-items-center w-12 h-12 rounded-md bg-soil-900 text-crop-300 font-display text-xl mb-4 border-2 border-crop-600 shadow-[0_3px_0_0_var(--color-crop-800)]" aria-hidden="true">✦</span>
             <h1 class="font-display text-2xl text-soil-800">Masuk ke Governance Center</h1>
             <p class="text-sm text-soil-500 mt-2">Gunakan akun yang telah terdaftar untuk mengakses modul.</p>
         </div>

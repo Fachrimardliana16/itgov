@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\BudgetPlan;
 use App\Models\Credential;
+use App\Models\RkapPlan;
 use App\Models\Sop;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -82,44 +82,17 @@ class DatabaseSeeder extends Seeder
             'notes_encrypted' => null,
         ]);
 
-        // --- Module 3: IT Annual Budget Planner ---
-        BudgetPlan::create([
-            'fiscal_year' => 2026,
-            'code' => 'BGT-2026-001',
-            'title' => 'Lisensi Antivirus Enterprise',
-            'category' => 'License',
-            'budget_type' => 'OPEX',
-            'planned_amount' => 25000000,
-            'used_amount' => 18000000,
-            'priority' => 'high',
-            'status' => 'in_progress',
-            'notes' => 'Renewal Q3',
-        ]);
-
-        BudgetPlan::create([
-            'fiscal_year' => 2026,
-            'code' => 'BGT-2026-002',
-            'title' => 'Server Rack & UPS',
-            'category' => 'Hardware',
-            'budget_type' => 'CAPEX',
-            'planned_amount' => 65000000,
-            'used_amount' => 65000000,
-            'priority' => 'critical',
-            'status' => 'completed',
-            'notes' => null,
-        ]);
-
-        BudgetPlan::create([
-            'fiscal_year' => 2026,
-            'code' => 'BGT-2026-003',
-            'title' => 'Internet Dedicated 500Mbps',
-            'category' => 'Internet_Cloud',
-            'budget_type' => 'OPEX',
-            'planned_amount' => 18000000,
-            'used_amount' => 5000000,
-            'priority' => 'medium',
-            'status' => 'approved',
-            'notes' => 'Kontrak 1 tahun',
-        ]);
+        // --- Module 3: RKAP Planner ---
+        foreach ([
+            ['RKAP-2026-001', 'Lisensi Antivirus Enterprise', 'Belanja Barang', 25000000, 18000000, 'tinggi', 'proses', 'Renewal Q3'],
+            ['RKAP-2026-002', 'Server Rack & UPS', 'Belanja Modal', 65000000, 65000000, 'kritis', 'selesai', null],
+            ['RKAP-2026-003', 'Internet Dedicated 500Mbps', 'Belanja Barang', 18000000, 5000000, 'sedang', 'disetujui', 'Kontrak 1 tahun'],
+        ] as [$kode, $kegiatan, $kategori, $plan, $used, $prioritas, $status, $catatan]) {
+            RkapPlan::create([
+                'fiscal_year' => 2026, 'kode' => $kode, 'kegiatan' => $kegiatan, 'kategori' => $kategori,
+                'belanja' => 'Langsung', 'planned_amount' => $plan, 'used_amount' => $used,
+                'prioritas' => $prioritas, 'status' => $status, 'catatan' => $catatan,
+            ]);
+        }
     }
 }

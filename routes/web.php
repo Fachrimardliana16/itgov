@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\BudgetPlannerController;
 use App\Http\Controllers\CredentialVaultController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\RkapPlannerController;
 use App\Http\Controllers\SopController;
+use App\Http\Controllers\ToolController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,11 +54,33 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Module 3: IT Budget Planner
+| Module 3: RKAP Planner (Rencana Kerja & Anggaran)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-    // Summary HARUS sebelum resource — 'summary' akan dicocokkan ke {budget} kalau resource duluan
-    Route::get('/budget/summary', [BudgetPlannerController::class, 'summary'])->name('budget.summary');
-    Route::resource('budget', BudgetPlannerController::class);
+    // Summary HARUS sebelum resource
+    Route::get('/rkap/summary', [RkapPlannerController::class, 'summary'])->name('rkap.summary');
+    Route::resource('rkap', RkapPlannerController::class);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Module 4: Inventaris IT
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::resource('inventaris', InventarisController::class)->parameters(['inventaris' => 'inventaris']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Module 5: Tools Check-in/out
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::resource('tools', ToolController::class);
+    Route::get('/tools/{tool}/pinjam', [ToolController::class, 'pinjam'])->name('tools.pinjam');
+    Route::post('/tools/{tool}/pinjam', [ToolController::class, 'storePinjam'])->name('tools.pinjam.store');
+    Route::get('/tools/loans/{loan}/kembalikan', [ToolController::class, 'kembalikan'])->name('tools.kembalikan');
+    Route::put('/tools/loans/{loan}/kembalikan', [ToolController::class, 'updateKembalikan'])->name('tools.kembalikan.update');
 });

@@ -73,7 +73,13 @@
        Base rules live in the selector group so .stat can stand alone. */
     .panel,
     .stat {
-        @apply bg-parchment border border-soil-200 rounded-xl shadow-[0_1px_2px_rgba(58,44,34,0.06),0_8px_24px_-12px_rgba(58,44,34,0.18)];
+        @apply bg-parchment border-2 border-soil-200 rounded-lg;
+        box-shadow: 0 3px 0 0 var(--color-soil-200), 0 14px 24px -16px rgba(58, 44, 34, 0.35);
+    }
+
+    /* Game stat card — coloured top bar */
+    .stat {
+        border-top: 6px solid var(--stat-accent, var(--color-crop-500));
     }
 
     .panel-header {
@@ -83,6 +89,15 @@
     /* Page heading — one shape for every authenticated page */
     .page-title {
         @apply font-display text-2xl text-soil-800 tracking-tight;
+    }
+
+    .page-title::after {
+        content: '';
+        display: block;
+        width: 3rem;
+        height: 4px;
+        margin-top: 0.5rem;
+        background: repeating-linear-gradient(90deg, var(--color-crop-500) 0 8px, var(--color-honey-400) 8px 16px);
     }
 
     .page-subtitle {
@@ -105,11 +120,19 @@
     }
 
     .btn-primary {
-        @apply bg-crop-600 text-white hover:bg-crop-700 focus-visible:outline-crop-600 shadow-sm;
+        @apply bg-crop-600 text-white hover:bg-crop-700 focus-visible:outline-crop-600;
+        box-shadow: 0 3px 0 0 var(--color-crop-800);
     }
 
     .btn-ember {
-        @apply bg-ember-500 text-white hover:bg-ember-600 focus-visible:outline-ember-500 shadow-sm;
+        @apply bg-ember-500 text-white hover:bg-ember-600 focus-visible:outline-ember-500;
+        box-shadow: 0 3px 0 0 var(--color-ember-700);
+    }
+
+    .btn-primary:active,
+    .btn-ember:active {
+        transform: translateY(2px);
+        box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.35);
     }
 
     .btn-quiet {
@@ -137,7 +160,7 @@
 
     /* Tables */
     .table-head {
-        @apply bg-soil-50 text-[0.6875rem] uppercase tracking-wider text-soil-500 font-semibold;
+        @apply bg-soil-100 border-b-2 border-soil-200 text-[0.6875rem] uppercase tracking-wider text-soil-500 font-semibold;
     }
 
     .table-head th {
@@ -157,6 +180,7 @@
     .badge-green,
     .badge-amber,
     .badge-red,
+    .badge-sky,
     .badge-neutral {
         @apply inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-full whitespace-nowrap;
     }
@@ -173,17 +197,21 @@
         @apply bg-ember-100 text-ember-700;
     }
 
+    .badge-sky {
+        @apply bg-sky-100 text-sky-500;
+    }
+
     .badge-neutral {
         @apply bg-soil-100 text-soil-700;
     }
 
     /* Stat tiles */
     .stat {
-        @apply px-5 py-4;
+        @apply px-3 sm:px-5 py-4 min-w-0;
     }
 
     .stat-value {
-        @apply font-display text-2xl text-soil-800 tabular-nums;
+        @apply font-display text-sm sm:text-base xl:text-lg text-soil-800 tabular-nums break-words;
     }
 
     .stat-label {

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') — {{ config('app.name', 'IT Governance Center') }}</title>
+    @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>[x-cloak] { display: none !important; }</style>
@@ -30,7 +31,9 @@
                     ['route' => 'home',       'label' => 'Dashboard', 'glyph' => '⌂'],
                     ['route' => 'sops.index', 'label' => 'SOP',       'glyph' => '▤'],
                     ['route' => 'vault.index','label' => 'Vault',     'glyph' => '⚿'],
-                    ['route' => 'budget.index','label' => 'Budget',   'glyph' => '⛃'],
+                    ['route' => 'rkap.index', 'label' => 'RKAP',      'glyph' => '▣'],
+                    ['route' => 'inventaris.index', 'label' => 'Inventaris', 'glyph' => '▦'],
+                    ['route' => 'tools.index', 'label' => 'Tools',    'glyph' => '⚒'],
                 ];
             @endphp
             @foreach ($nav as $item)
@@ -78,7 +81,7 @@
         <nav class="flex overflow-x-auto border-t border-soil-800 text-sm">
             @foreach ($nav as $item)
                 <a href="{{ route($item['route']) }}"
-                   class="flex-1 whitespace-nowrap px-4 py-2.5 text-center transition-colors
+                   class="shrink-0 grow whitespace-nowrap px-4 py-2.5 text-center transition-colors
                           {{ request()->routeIs($item['route'])
                                 ? 'bg-crop-600 text-white font-medium'
                                 : 'text-soil-300' }}">

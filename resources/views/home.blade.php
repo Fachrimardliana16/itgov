@@ -4,10 +4,10 @@
 
 @php
     $fy = now()->year;
-    $total = \App\Models\BudgetPlan::where('fiscal_year', $fy)->sum('planned_amount');
-    $used  = \App\Models\BudgetPlan::where('fiscal_year', $fy)->sum('used_amount');
-    $capex = \App\Models\BudgetPlan::where('fiscal_year', $fy)->where('budget_type', 'CAPEX')->sum('planned_amount');
-    $opex  = \App\Models\BudgetPlan::where('fiscal_year', $fy)->where('budget_type', 'OPEX')->sum('planned_amount');
+    $total = \App\Models\RkapPlan::where('fiscal_year', $fy)->sum('planned_amount');
+    $used  = \App\Models\RkapPlan::where('fiscal_year', $fy)->sum('used_amount');
+    $capex = \App\Models\RkapPlan::where('fiscal_year', $fy)->where('kategori', 'Belanja Modal')->sum('planned_amount');
+    $opex  = $total - $capex;
     $sopCount   = \App\Models\Sop::count();
     $credCount  = \App\Models\Credential::count();
     $realized   = $total > 0 ? round($used / $total * 100) : 0;
@@ -71,6 +71,7 @@
                 <span class="absolute inset-x-3 top-0 h-3 rounded-sm bg-soil-700/85" aria-hidden="true"></span>
                 <span class="absolute top-6 left-5 w-5 h-5 rounded-sm bg-soil-900/70"
                       style="box-shadow: 26px 0 0 -2px rgba(38,28,22,0.55), 0 0 0 2px rgba(253,248,239,0.55)" aria-hidden="true"></span>
+                <span class="absolute top-6 right-5 w-7 h-7 rounded-sm bg-sky-100 border-2 border-soil-800/70" style="background-image: linear-gradient(var(--color-soil-800) 0 0), linear-gradient(var(--color-soil-800) 0 0); background-size: 2px 100%, 100% 2px; background-position: center; background-repeat: no-repeat;" aria-hidden="true"></span>
                 <div class="relative mt-2">
                     <p class="font-display text-xs uppercase tracking-widest text-crop-900/70">Perpustakaan</p>
                     <h3 class="font-display text-lg text-soil-900 mt-1">Dokumentasi SOP</h3>
@@ -86,6 +87,7 @@
                 <span class="absolute inset-x-3 top-0 h-3 rounded-sm bg-soil-700/85" aria-hidden="true"></span>
                 <span class="absolute top-6 left-5 w-5 h-5 rounded-sm bg-soil-900/70"
                       style="box-shadow: 26px 0 0 -2px rgba(38,28,22,0.55), 0 0 0 2px rgba(253,248,239,0.55)" aria-hidden="true"></span>
+                <span class="absolute top-6 right-5 w-7 h-7 rounded-sm bg-sky-100 border-2 border-soil-800/70" style="background-image: linear-gradient(var(--color-soil-800) 0 0), linear-gradient(var(--color-soil-800) 0 0); background-size: 2px 100%, 100% 2px; background-position: center; background-repeat: no-repeat;" aria-hidden="true"></span>
                 <div class="relative mt-2">
                     <p class="font-display text-xs uppercase tracking-widest text-ember-700/70">Gudang Tertua</p>
                     <h3 class="font-display text-lg text-soil-900 mt-1">Credential Vault</h3>
@@ -95,15 +97,16 @@
                 </div>
             </a>
 
-            {{-- Lumbung — Budget --}}
-            <a href="{{ route('budget.index') }}" class="building block px-5 py-4 min-h-[9.5rem]"
+            {{-- Lumbung — RKAP --}}
+            <a href="{{ route('rkap.index') }}" class="building block px-5 py-4 min-h-[9.5rem]"
                style="background: linear-gradient(180deg, #ffe9a8, #f2c14e); --shade: #b8861f;">
                 <span class="absolute inset-x-3 top-0 h-3 rounded-sm bg-soil-700/85" aria-hidden="true"></span>
                 <span class="absolute top-6 left-5 w-5 h-5 rounded-sm bg-soil-900/70"
                       style="box-shadow: 26px 0 0 -2px rgba(38,28,22,0.55), 0 0 0 2px rgba(253,248,239,0.55)" aria-hidden="true"></span>
+                <span class="absolute top-6 right-5 w-7 h-7 rounded-sm bg-sky-100 border-2 border-soil-800/70" style="background-image: linear-gradient(var(--color-soil-800) 0 0), linear-gradient(var(--color-soil-800) 0 0); background-size: 2px 100%, 100% 2px; background-position: center; background-repeat: no-repeat;" aria-hidden="true"></span>
                 <div class="relative mt-2">
                     <p class="font-display text-xs uppercase tracking-widest text-honey-700">Lumbung Panen</p>
-                    <h3 class="font-display text-lg text-soil-900 mt-1">Budget Planner</h3>
+                    <h3 class="font-display text-lg text-soil-900 mt-1">RKAP Planner</h3>
                     <p class="text-sm text-honey-700 mt-1.5 leading-snug">
                         Rp {{ number_format($total, 0, ',', '.') }} dialokasikan tahun ini.
                     </p>
@@ -129,8 +132,8 @@
                 <p class="text-[0.6875rem] uppercase tracking-wider text-crop-900/70 mt-0.5">Kredensial aman</p>
             </div>
             <div>
-                <p class="font-display text-sm text-soil-900">{{ $realized }}% Reality</p>
-                <p class="text-[0.6875rem] uppercase tracking-wider text-crop-900/70 mt-0.5">Realisasi budget</p>
+                <p class="font-display text-sm text-soil-900">{{ $realized }}% terealisasi</p>
+                <p class="text-[0.6875rem] uppercase tracking-wider text-crop-900/70 mt-0.5">Realisasi RKAP</p>
             </div>
         </div>
     </div>
@@ -141,27 +144,27 @@
     <div class="flex flex-wrap items-end justify-between gap-3 mb-5">
         <div>
             <h2 id="harvest-heading" class="font-display text-lg text-soil-800">Panen Tahun {{ $fy }}</h2>
-            <p class="text-sm text-soil-500 mt-1">Rincian alokasi CAPEX dan OPEX beserta realisasinya.</p>
+            <p class="text-sm text-soil-500 mt-1">Rincian alokasi belanja modal dan operasional beserta realisasinya.</p>
         </div>
-        <a href="{{ route('budget.index') }}" class="action-link">Lihat semua rencana →</a>
+        <a href="{{ route('rkap.index') }}" class="action-link">Lihat semua rencana →</a>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="stat !border-0 !shadow-none bg-crop-50">
+        <div class="stat bg-crop-50" style="--stat-accent: var(--color-crop-500)">
             <p class="stat-value text-crop-700">Rp {{ number_format($total, 0, ',', '.') }}</p>
             <p class="stat-label">Total alokasi</p>
         </div>
-        <div class="stat !border-0 !shadow-none bg-honey-50">
+        <div class="stat bg-honey-50" style="--stat-accent: var(--color-honey-400)">
             <p class="stat-value text-honey-600">Rp {{ number_format($used, 0, ',', '.') }}</p>
             <p class="stat-label">Terpakai</p>
         </div>
-        <div class="stat !border-0 !shadow-none {{ ($total - $used) < 0 ? 'bg-ember-50' : 'bg-crop-50' }}">
+        <div class="stat {{ ($total - $used) < 0 ? 'bg-ember-50' : 'bg-crop-50' }}" style="--stat-accent: {{ ($total - $used) < 0 ? 'var(--color-ember-400)' : 'var(--color-crop-500)' }}">
             <p class="stat-value {{ ($total - $used) < 0 ? 'text-ember-600' : 'text-crop-700' }}">
                 Rp {{ number_format($total - $used, 0, ',', '.') }}
             </p>
             <p class="stat-label">Sisa</p>
         </div>
-        <div class="stat !border-0 !shadow-none bg-soil-50">
+        <div class="stat bg-soil-50" style="--stat-accent: var(--color-soil-400)">
             <p class="stat-value">{{ $realized }}%</p>
             <p class="stat-label">Realisasi</p>
         </div>
@@ -171,7 +174,7 @@
         <div class="space-y-4">
             <div>
                 <div class="flex items-baseline justify-between mb-1.5">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-soil-600">CAPEX</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-soil-600">Belanja Modal</span>
                     <span class="text-xs font-mono text-soil-500">
                         Rp {{ number_format($capex, 0, ',', '.') }} · {{ round($capex / $total * 100) }}%
                     </span>
@@ -180,7 +183,7 @@
             </div>
             <div>
                 <div class="flex items-baseline justify-between mb-1.5">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-soil-600">OPEX</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-soil-600">Operasional</span>
                     <span class="text-xs font-mono text-soil-500">
                         Rp {{ number_format($opex, 0, ',', '.') }} · {{ round($opex / $total * 100) }}%
                     </span>
@@ -190,8 +193,8 @@
         </div>
     @else
         <p class="text-sm text-soil-500 py-4 text-center">
-            Belum ada rencana budget tahun {{ $fy }}. Mulai dari
-            <a href="{{ route('budget.create') }}" class="text-crop-700 font-medium hover:underline">rencana pertama</a>.
+            Belum ada rencana RKAP tahun {{ $fy }}. Mulai dari
+            <a href="{{ route('rkap.create') }}" class="text-crop-700 font-medium hover:underline">rencana pertama</a>.
         </p>
     @endif
 </section>
