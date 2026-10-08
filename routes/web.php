@@ -44,7 +44,9 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-    Route::resource('vault', CredentialVaultController::class)->except(['show']);
+    Route::resource('vault', CredentialVaultController::class)->except(['show'])->parameters([
+        'vault' => 'credential',
+    ]);
     Route::post('/vault/{credential}/reveal', [CredentialVaultController::class, 'reveal'])->name('vault.reveal');
 });
 

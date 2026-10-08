@@ -1,46 +1,67 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="min-h-[60vh] flex items-center justify-center">
-    <div class="w-full max-w-md">
-        <div class="bg-white rounded-lg shadow-md p-8">
-            <h1 class="text-2xl font-bold text-center mb-6">Login IT Governance</h1>
+@section('title', 'Masuk')
 
+@section('content')
+
+<div class="auth-page -mx-4 sm:-mx-6 lg:-mx-8 -my-8 px-4 sm:px-6 lg:px-8 py-14 flex items-center justify-center">
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-7">
+            <span class="inline-grid place-items-center w-12 h-12 rounded-xl bg-soil-900 text-crop-300 font-display text-xl mb-4" aria-hidden="true">✦</span>
+            <h1 class="font-display text-2xl text-soil-800">Masuk ke Governance Center</h1>
+            <p class="text-sm text-soil-500 mt-2">Gunakan akun yang telah terdaftar untuk mengakses modul.</p>
+        </div>
+
+        <div class="panel p-7">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror"
-                        required autofocus>
-                    @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+
+                <div>
+                    <label for="email" class="field-label">Email</label>
+                    <input type="email" name="email" id="email"
+                           value="{{ old('email') }}"
+                           class="field @error('email') field-invalid @enderror"
+                           required autofocus autocomplete="username">
+                    @error('email')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="mb-6">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div class="mt-5">
+                    <label for="password" class="field-label">Password</label>
                     <input type="password" name="password" id="password"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror"
-                        required>
-                    @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                           class="field @error('password') field-invalid @enderror"
+                           required autocomplete="current-password">
+                    @error('password')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium">
-                    Login
-                </button>
+                <button type="submit" class="btn-primary w-full mt-7">Masuk</button>
             </form>
 
-            <p class="text-center text-sm text-gray-500 mt-4">
-                Belum punya akun? <a href="{{ route('register') }}" class="text-blue-600 hover:underline">Daftar</a>
+            <p class="text-center text-sm text-soil-500 mt-6">
+                Belum punya akun?
+                <a href="{{ route('register') }}" class="font-medium text-crop-700 hover:underline">Daftar</a>
             </p>
-
-            <hr class="my-6">
-
-            <div class="bg-gray-50 rounded p-3 text-xs text-gray-600">
-                <p><strong>Akun demo:</strong></p>
-                <p>Admin: <code>admin@itgov.local</code> / <code>password123</code></p>
-                <p>Staff: <code>staff@itgov.local</code> / <code>password123</code></p>
-            </div>
         </div>
+
+        <aside class="mt-6 panel px-5 py-4">
+            <p class="text-[0.6875rem] font-semibold uppercase tracking-wider text-soil-500 mb-2">Akun demo</p>
+            <dl class="space-y-1.5 text-sm">
+                <div class="flex items-baseline gap-2">
+                    <dt class="w-14 shrink-0 text-soil-500">Admin</dt>
+                    <dd class="font-mono text-xs text-soil-700">admin@itgov.local / password123</dd>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <dt class="w-14 shrink-0 text-soil-500">Staff</dt>
+                    <dd class="font-mono text-xs text-soil-700">staff@itgov.local / password123</dd>
+                </div>
+            </dl>
+        </aside>
+
     </div>
 </div>
-@stop
+
+@endsection

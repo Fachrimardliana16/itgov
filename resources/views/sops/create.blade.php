@@ -3,62 +3,72 @@
 @section('title', 'Buat SOP')
 
 @section('content')
+
 <div class="max-w-3xl mx-auto">
-    <h1 class="text-2xl font-bold mb-6">📋 Buat SOP Baru</h1>
+    <div class="mb-6">
+        <h1 class="page-title">Buat SOP Baru</h1>
+        <p class="page-subtitle">Tulis prosedur baru dan tetapkan versi awalnya.</p>
+    </div>
 
-    <form method="POST" action="{{ route('sops.store') }}" class="bg-white rounded-lg shadow p-6 space-y-4">
+    <form method="POST" action="{{ route('sops.store') }}" class="panel p-6 space-y-5">
         @csrf
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Code</label>
-            <input type="text" name="code" value="{{ old('code', 'SOP-IT-') }}"
-                class="w-full px-3 py-2 border rounded-md @error('code') border-red-500 @enderror" required>
-            @error('code') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-        </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-            <input type="text" name="title" value="{{ old('title') }}"
-                class="w-full px-3 py-2 border rounded-md @error('title') border-red-500 @enderror" required>
-            @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                <select name="category" class="w-full px-3 py-2 border rounded-md" required>
+                <label for="code" class="field-label">Code</label>
+                <input type="text" name="code" id="code" value="{{ old('code', 'SOP-IT-') }}"
+                       class="field font-mono @error('code') field-invalid @enderror" required>
+                @error('code') <p class="field-error">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label for="version" class="field-label">Versi</label>
+                <input type="text" name="version" id="version" value="{{ old('version', '1.0.0') }}"
+                       class="field font-mono" required>
+            </div>
+        </div>
+
+        <div>
+            <label for="title" class="field-label">Judul</label>
+            <input type="text" name="title" id="title" value="{{ old('title') }}"
+                   class="field @error('title') field-invalid @enderror" required>
+            @error('title') <p class="field-error">{{ $message }}</p> @enderror
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+                <label for="category" class="field-label">Kategori</label>
+                <select name="category" id="category" class="field" required>
                     @foreach(['Infrastructure', 'Security', 'Development', 'Helpdesk', 'General'] as $cat)
-                    <option value="{{ $cat }}" @if(old('category') === $cat) selected @endif>{{ $cat }}</option>
+                        <option value="{{ $cat }}" @selected(old('category') === $cat)>{{ $cat }}</option>
                     @endforeach
                 </select>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status" class="w-full px-3 py-2 border rounded-md">
+                <label for="status" class="field-label">Status</label>
+                <select name="status" id="status" class="field">
                     @foreach(['draft', 'review', 'approved', 'archived'] as $s)
-                    <option value="{{ $s }}" @if(old('status') === $s) selected @endif>{{ ucfirst($s) }}</option>
+                        <option value="{{ $s }}" @selected(old('status', 'draft') === $s)>{{ ucfirst($s) }}</option>
                     @endforeach
                 </select>
             </div>
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Version</label>
-            <input type="text" name="version" value="{{ old('version', '1.0.0') }}" class="w-full px-3 py-2 border rounded-md" required>
+            <label for="content" class="field-label">Isi SOP</label>
+            <textarea name="content" id="content" rows="12"
+                      class="field font-mono text-xs leading-relaxed @error('content') field-invalid @enderror"
+                      required>{{ old('content') }}</textarea>
+            @error('content') <p class="field-error">{{ $message }}</p> @enderror
+            <p class="text-xs text-soil-400 mt-1.5">Mendukung penulisan HTML atau Markdown.</p>
         </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Content (HTML/Markdown)</label>
-            <textarea name="content" rows="10"
-                class="w-full px-3 py-2 border rounded-md font-mono text-sm @error('content') border-red-500 @enderror"
-                required>{{ old('content') }}</textarea>
-            @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-        </div>
-
-        <div class="flex gap-3">
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Simpan</button>
-            <a href="{{ route('sops.index') }}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">Batal</a>
+        <div class="flex flex-wrap gap-3 pt-2">
+            <button type="submit" class="btn-primary">Simpan SOP</button>
+            <a href="{{ route('sops.index') }}" class="btn-quiet">Batal</a>
         </div>
     </form>
 </div>
-@stop
+
+@endsection

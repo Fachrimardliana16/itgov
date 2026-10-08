@@ -1,54 +1,73 @@
 @extends('layouts.app')
 
+@section('title', 'Dokumentasi SOP')
+
 @section('content')
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">📋 IT SOP Documentation</h1>
-    <a href="{{ route('sops.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm">+ SOP Baru</a>
+
+<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+    <div>
+        <h1 class="page-title">Dokumentasi SOP</h1>
+        <p class="page-subtitle">Perpustakaan prosedur operasi IT, tertata per versi dan status.</p>
+    </div>
+    <a href="{{ route('sops.create') }}" class="btn-primary">+ SOP Baru</a>
 </div>
 
-<div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-            <tr>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Version</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            @forelse ($sops as $sop)
-            <tr class="hover:bg-gray-50">
-                <td class="px-4 py-3 text-sm font-mono text-gray-900">{{ $sop->code }}</td>
-                <td class="px-4 py-3 text-sm text-gray-900">{{ $sop->title }}</td>
-                <td class="px-4 py-3 text-sm text-gray-500">{{ $sop->category }}</td>
-                <td class="px-4 py-3 text-sm">
-                    <span class="px-2 py-1 text-xs rounded-full @if($sop->status === 'approved') bg-green-100 text-green-800 @elseif($sop->status === 'draft') bg-gray-100 text-gray-800 @else bg-yellow-100 text-yellow-800 @endif">
-                        {{ ucfirst($sop->status) }}
-                    </span>
-                </td>
-                <td class="px-4 py-3 text-sm text-gray-500">{{ $sop->version }}</td>
-                <td class="px-4 py-3 text-sm text-gray-500">{{ $sop->author?->name ?? 'N/A' }}</td>
-                <td class="px-4 py-3 text-sm flex gap-2">
-                    <a href="{{ route('sops.show', $sop) }}" class="text-blue-600 hover:underline text-xs">View</a>
-                    <a href="{{ route('sops.edit', $sop) }}" class="text-yellow-600 hover:underline text-xs">Edit</a>
-                    <form method="POST" action="{{ route('sops.destroy', $sop) }}" onsubmit="return confirm('Yakin hapus?')" class="inline">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="text-red-600 hover:underline text-xs">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="7" class="px-4 py-6 text-center text-gray-500 text-sm">Belum ada SOP.</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+<div class="panel overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead class="table-head">
+                <tr>
+                    <th>Code</th>
+                    <th>Judul</th>
+                    <th>Kategori</th>
+                    <th>Status</th>
+                    <th>Versi</th>
+                    <th>Penulis</th>
+                    <th class="!text-right">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="table-body">
+                @forelse ($sops as $sop)
+                    <tr>
+                        <td class="font-mono text-xs text-soil-500 whitespace-nowrap">{{ $sop->code }}</td>
+                        <td class="font-medium text-soil-800">{{ $sop->title }}</td>
+                        <td class="text-soil-500">{{ $sop->category }}</td>
+                        <td>
+                            <span @class([
+                                'badge-green'   => $sop->status === 'approved',
+                                'badge-amber'    => $sop->status === 'review',
+                                'badge-neutral'  => in_array($sop->status, ['draft', 'archived'], true),
+                            ])>{{ ucfirst($sop->status) }}</span>
+                        </td>
+                        <td class="font-mono text-xs text-soil-500">v{{ $sop->version }}</td>
+                        <td class="text-soil-500">{{ $sop->author?->name ?? '—' }}</td>
+                        <td>
+                            <div class="flex items-center justify-end gap-3">
+                                <a href="{{ route('sops.show', $sop) }}" class="action-link">Lihat</a>
+                                <a href="{{ route('sops.edit', $sop) }}" class="action-link">Edit</a>
+                                <form method="POST" action="{{ route('sops.destroy', $sop) }}"
+                                      onsubmit="return confirm('Yakin menghapus SOP ini?')" class="inline">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="action-link action-link-danger">Hapus</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="px-4 py-16 text-center">
+                            <p class="text-sm text-soil-500">Belum ada SOP.</p>
+                            <a href="{{ route('sops.create') }}" class="action-link mt-1 inline-block">Tulis yang pertama</a>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<div class="mt-4">{{ $sops->links() }}</div>
-@stop
+@if ($sops->hasPages())
+    <div class="mt-6">{{ $sops->links() }}</div>
+@endif
+
+@endsection

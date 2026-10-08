@@ -1,53 +1,72 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="min-h-[60vh] flex items-center justify-center">
-    <div class="w-full max-w-md">
-        <div class="bg-white rounded-lg shadow-md p-8">
-            <h1 class="text-2xl font-bold text-center mb-6">Daftar Akun Baru</h1>
+@section('title', 'Daftar')
 
+@section('content')
+
+<div class="auth-page -mx-4 sm:-mx-6 lg:-mx-8 -my-8 px-4 sm:px-6 lg:px-8 py-14 flex items-center justify-center">
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-7">
+            <span class="inline-grid place-items-center w-12 h-12 rounded-xl bg-soil-900 text-crop-300 font-display text-xl mb-4" aria-hidden="true">✦</span>
+            <h1 class="font-display text-2xl text-soil-800">Daftar akun baru</h1>
+            <p class="text-sm text-soil-500 mt-2">Akun baru terdaftar dengan peran Staff.</p>
+        </div>
+
+        <div class="panel p-7">
             <form method="POST" action="{{ route('register') }}">
                 @csrf
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                    <input type="text" name="name" id="name" value="{{ old('name') }}"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror"
-                        required autofocus>
-                    @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+
+                <div>
+                    <label for="name" class="field-label">Nama</label>
+                    <input type="text" name="name" id="name"
+                           value="{{ old('name') }}"
+                           class="field @error('name') field-invalid @enderror"
+                           required autofocus autocomplete="name">
+                    @error('name')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror"
-                        required>
-                    @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                <div class="mt-5">
+                    <label for="email" class="field-label">Email</label>
+                    <input type="email" name="email" id="email"
+                           value="{{ old('email') }}"
+                           class="field @error('email') field-invalid @enderror"
+                           required autocomplete="username">
+                    @error('email')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password (min 6 char)</label>
+                <div class="mt-5">
+                    <label for="password" class="field-label">Password</label>
                     <input type="password" name="password" id="password"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror"
-                        required>
-                    @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                           class="field @error('password') field-invalid @enderror"
+                           required autocomplete="new-password" minlength="6" aria-describedby="password-hint">
+                    @error('password')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
+                    <p id="password-hint" class="text-xs text-soil-400 mt-1.5">Minimal 6 karakter.</p>
                 </div>
 
-                <div class="mb-6">
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password</label>
+                <div class="mt-5">
+                    <label for="password_confirmation" class="field-label">Konfirmasi password</label>
                     <input type="password" name="password_confirmation" id="password_confirmation"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required>
+                           class="field"
+                           required autocomplete="new-password">
                 </div>
 
-                <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 font-medium">
-                    Daftar
-                </button>
+                <button type="submit" class="btn-primary w-full mt-7">Buat akun</button>
             </form>
 
-            <p class="text-center text-sm text-gray-500 mt-4">
-                Sudah punya akun? <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Login</a>
+            <p class="text-center text-sm text-soil-500 mt-6">
+                Sudah punya akun?
+                <a href="{{ route('login') }}" class="font-medium text-crop-700 hover:underline">Masuk</a>
             </p>
         </div>
+
     </div>
 </div>
-@stop
+
+@endsection

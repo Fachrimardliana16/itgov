@@ -6,4 +6,310 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Silkscreen', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+
+    /* Earthy browns — app chrome, headings, rules */
+    --color-soil-50: #faf6f0;
+    --color-soil-100: #f0e7db;
+    --color-soil-200: #e0cdb4;
+    --color-soil-300: #c8aa86;
+    --color-soil-400: #a8855f;
+    --color-soil-500: #8b6b4f;
+    --color-soil-600: #6d5340;
+    --color-soil-700: #523e31;
+    --color-soil-800: #3a2c22;
+    --color-soil-900: #261c16;
+
+    /* Field greens — primary actions, growth, progress */
+    --color-crop-50: #f3f9ec;
+    --color-crop-100: #e2f1cf;
+    --color-crop-200: #c6e3a1;
+    --color-crop-300: #a7d46a;
+    --color-crop-400: #86bd43;
+    --color-crop-500: #6a9c2f;
+    --color-crop-600: #517c24;
+    --color-crop-700: #3f601d;
+    --color-crop-800: #2f4f1f;
+    --color-crop-900: #1f3617;
+
+    /* Dusk sky — the village backdrop */
+    --color-sky-50: #f4fafd;
+    --color-sky-100: #e6f4fa;
+    --color-sky-200: #c4e6f3;
+    --color-sky-300: #8ecae6;
+    --color-sky-400: #5fb0d6;
+    --color-sky-500: #3d92bd;
+
+    /* Kiln ember — vault, destructive, reveal countdown */
+    --color-ember-50: #fdf1ee;
+    --color-ember-100: #fadedb;
+    --color-ember-200: #f5c0b7;
+    --color-ember-300: #e07a5f;
+    --color-ember-400: #d15b41;
+    --color-ember-500: #c44536;
+    --color-ember-600: #a33529;
+    --color-ember-700: #7d2820;
+
+    /* Honey — budget, currency, highlights */
+    --color-honey-50: #fef9ec;
+    --color-honey-100: #fdf0cc;
+    --color-honey-200: #ffe9a8;
+    --color-honey-300: #f7d375;
+    --color-honey-400: #f2c14e;
+    --color-honey-500: #dda82f;
+    --color-honey-600: #b8861f;
+    --color-honey-700: #8f6617;
+
+    --color-ink: #2b2320;
+    --color-parchment: #fdf8ef;
+}
+
+/* ------------------------------------------------------------------ *
+ * Shared component layer
+ * ------------------------------------------------------------------ */
+
+@layer components {
+    /* Panels — parchment surfaces instead of flat white.
+       Base rules live in the selector group so .stat can stand alone. */
+    .panel,
+    .stat {
+        @apply bg-parchment border border-soil-200 rounded-xl shadow-[0_1px_2px_rgba(58,44,34,0.06),0_8px_24px_-12px_rgba(58,44,34,0.18)];
+    }
+
+    .panel-header {
+        @apply px-5 py-4 border-b border-soil-200 flex flex-wrap items-center justify-between gap-3;
+    }
+
+    /* Page heading — one shape for every authenticated page */
+    .page-title {
+        @apply font-display text-2xl text-soil-800 tracking-tight;
+    }
+
+    .page-subtitle {
+        @apply text-sm text-soil-500 mt-1;
+    }
+
+    /* Buttons — base shared by selector group, so each variant works standalone.
+       Tailwind v4 @apply only accepts real utilities, never sibling component classes. */
+    .btn,
+    .btn-primary,
+    .btn-ember,
+    .btn-quiet {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg
+               transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2
+               disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap;
+    }
+
+    .btn {
+        @apply focus-visible:outline-soil-500;
+    }
+
+    .btn-primary {
+        @apply bg-crop-600 text-white hover:bg-crop-700 focus-visible:outline-crop-600 shadow-sm;
+    }
+
+    .btn-ember {
+        @apply bg-ember-500 text-white hover:bg-ember-600 focus-visible:outline-ember-500 shadow-sm;
+    }
+
+    .btn-quiet {
+        @apply bg-white text-soil-700 border border-soil-200 hover:bg-soil-50 focus-visible:outline-soil-500;
+    }
+
+    /* Form fields */
+    .field-label {
+        @apply block text-xs font-semibold uppercase tracking-wider text-soil-600 mb-1.5;
+    }
+
+    .field {
+        @apply w-full px-3 py-2.5 bg-white border border-soil-200 rounded-lg text-sm text-ink
+               placeholder:text-soil-400 transition-colors
+               focus:outline-none focus:border-crop-500 focus:ring-2 focus:ring-crop-500/20;
+    }
+
+    .field-invalid {
+        @apply border-ember-400 focus:border-ember-500 focus:ring-ember-500/20;
+    }
+
+    .field-error {
+        @apply text-xs text-ember-600 mt-1.5;
+    }
+
+    /* Tables */
+    .table-head {
+        @apply bg-soil-50 text-[0.6875rem] uppercase tracking-wider text-soil-500 font-semibold;
+    }
+
+    .table-head th {
+        @apply px-4 py-3 text-left whitespace-nowrap;
+    }
+
+    .table-body td {
+        @apply px-4 py-3 text-sm text-soil-700 align-middle;
+    }
+
+    .table-body tr {
+        @apply border-t border-soil-100 transition-colors hover:bg-crop-50/50;
+    }
+
+    /* Badges — same selector-group pattern as the buttons */
+    .badge,
+    .badge-green,
+    .badge-amber,
+    .badge-red,
+    .badge-neutral {
+        @apply inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-full whitespace-nowrap;
+    }
+
+    .badge-green {
+        @apply bg-crop-100 text-crop-800;
+    }
+
+    .badge-amber {
+        @apply bg-honey-100 text-honey-700;
+    }
+
+    .badge-red {
+        @apply bg-ember-100 text-ember-700;
+    }
+
+    .badge-neutral {
+        @apply bg-soil-100 text-soil-700;
+    }
+
+    /* Stat tiles */
+    .stat {
+        @apply px-5 py-4;
+    }
+
+    .stat-value {
+        @apply font-display text-2xl text-soil-800 tabular-nums;
+    }
+
+    .stat-label {
+        @apply text-xs uppercase tracking-wider text-soil-500 mt-1;
+    }
+
+    /* Progress rails */
+    .rail {
+        @apply h-2.5 bg-soil-200 rounded-full overflow-hidden;
+    }
+
+    .rail-fill {
+        @apply h-full rounded-full transition-[width] duration-700 ease-out;
+    }
+
+    /* Row actions — selector group, not a chained @apply */
+    .action-link,
+    .action-link-danger {
+        @apply text-xs font-medium text-soil-500 hover:text-soil-800 transition-colors;
+    }
+
+    .action-link-danger {
+        @apply hover:text-ember-600;
+    }
+}
+
+/* ------------------------------------------------------------------ *
+ * The village — CSS-only 16-bit scene
+ * ------------------------------------------------------------------ */
+
+.village-sky {
+    background:
+        radial-gradient(circle at 78% 22%, #ffe9a8 0 42px, rgba(255, 233, 168, 0.55) 42px 96px, transparent 96px),
+        linear-gradient(180deg, #c4e6f3 0%, #e6f4fa 46%, #fef9ec 74%, #fdf0cc 100%);
+}
+
+/* 8px pixel grid — hard steps, no blur, reads as terrain */
+.village-ground {
+    background-color: #86bd43;
+    background-image:
+        repeating-linear-gradient(0deg, rgba(31, 54, 23, 0.09) 0 1px, transparent 1px 8px),
+        repeating-linear-gradient(90deg, rgba(31, 54, 23, 0.09) 0 1px, transparent 1px 8px),
+        linear-gradient(180deg, #a7d46a 0%, #86bd43 46%, #6a9c2f 100%);
+}
+
+/* Pixel-paragraph — hard 2px shadow, the 16-bit text signature */
+.pixel-text {
+    font-family: var(--font-display);
+    text-shadow:
+        2px 0 0 var(--color-soil-900),
+        -2px 0 0 var(--color-soil-900),
+        0 2px 0 var(--color-soil-900),
+        0 -2px 0 var(--color-soil-900),
+        2px 2px 0 var(--color-soil-900),
+        -2px -2px 0 var(--color-soil-900);
+}
+
+/* Buildings — stacked box-shadow blocks standing in for sprites */
+.building {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-radius: 6px 6px 2px 2px;
+    box-shadow:
+        0 4px 0 0 var(--shade, var(--color-soil-700)),
+        0 10px 22px -8px rgba(31, 54, 23, 0.55);
+    transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 220ms ease;
+}
+
+.building:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 10px 0 0 var(--shade, var(--color-soil-700)),
+        0 18px 30px -10px rgba(31, 54, 23, 0.6);
+}
+
+.building:active {
+    transform: translateY(-1px);
+}
+
+/* Drifting clouds */
+@keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(24px); }
+}
+
+.village-drift {
+    animation: drift 9s ease-in-out infinite alternate;
+}
+
+/* Gentle crop sway */
+@keyframes sway {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+}
+
+.village-sway {
+    animation: sway 3.4s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .village-drift,
+    .village-sway,
+    .rail-fill {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* ------------------------------------------------------------------ *
+ * Auth — formal, quiet
+ * ------------------------------------------------------------------ */
+
+.auth-page {
+    background:
+        radial-gradient(circle at 50% 0%, #f3f9ec 0%, transparent 58%),
+        linear-gradient(180deg, #fdf8ef 0%, #f0e7db 100%);
+}
+
+/* Tailwind's first-party form reset hides native autofill tint */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-ink);
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    caret-color: var(--color-ink);
 }
